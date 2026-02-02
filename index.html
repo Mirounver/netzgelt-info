@@ -26,53 +26,36 @@ body{
   padding:48px;
   border-radius:20px;
   box-shadow:0 20px 40px rgba(0,0,0,.08);
-}
-.logo{
   text-align:center;
-  margin-bottom:24px;
 }
-.logo img{max-height:60px}
-
-h1,h2{text-align:center}
-p{color:#444;line-height:1.6;text-align:center}
+.logo img{max-height:60px;margin-bottom:24px}
+h1{margin-top:0}
+h2{margin-top:48px}
+p{color:#444;line-height:1.6}
 
 .selectors{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:40px;
   margin:40px 0;
+  text-align:left;
 }
 select{
   width:100%;
   padding:12px;
+  font-size:1rem;
   border-radius:10px;
   border:1px solid #ccc;
   margin-top:8px;
 }
 
-.toggle{
-  text-align:center;
-  margin:20px 0;
-}
-.toggle button{
-  padding:8px 16px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  background:#fff;
-  cursor:pointer;
-}
-.toggle button.active{
-  background:#005ea8;
-  color:#fff;
-  border-color:#005ea8;
-}
-
-.result{display:none;margin-top:32px}
+.result{display:none;text-align:left;margin-top:32px}
 
 table{
   width:100%;
   border-collapse:collapse;
   margin-top:20px;
+  font-size:.95rem;
 }
 th,td{
   padding:10px 12px;
@@ -81,21 +64,10 @@ th,td{
 th{text-align:center;background:#f0f3f7}
 td:first-child{font-weight:500}
 td:not(:first-child){text-align:right;white-space:nowrap}
+tfoot td{font-weight:700;background:#f9fafb}
 
 .pos{color:#0a7a2f;font-weight:600}
 .neg{color:#b00020;font-weight:600}
-
-canvas{display:block;margin:40px auto 0}
-
-.actions{text-align:right;margin-top:24px}
-.actions button{
-  background:#005ea8;
-  color:#fff;
-  border:0;
-  padding:10px 16px;
-  border-radius:10px;
-  cursor:pointer;
-}
 
 .disclaimer{
   margin-top:32px;
@@ -106,28 +78,23 @@ canvas{display:block;margin:40px auto 0}
   border-radius:10px;
 }
 
-footer{
-  text-align:center;
+.actions{
   margin-top:24px;
-  font-size:.75rem;
-  color:#666;
+  text-align:right;
 }
+button{
+  padding:10px 16px;
+  border-radius:10px;
+  border:0;
+  background:#005ea8;
+  color:#fff;
+  cursor:pointer;
+}
+button:hover{background:#004a86}
 
 @media(max-width:900px){
   .selectors{grid-template-columns:1fr}
-}
-
-@media print{
-  body{background:#fff}
-  .selectors,.toggle,.actions{display:none}
-  .card{box-shadow:none;padding:20px}
-  footer{
-    position:fixed;
-    bottom:10px;
-    width:100%;
-    text-align:center;
-    font-size:10px;
-  }
+  .card{padding:32px 24px}
 }
 </style>
 </head>
@@ -137,14 +104,14 @@ footer{
 <div class="card">
 
 <div class="logo">
-  <img src="N-ERGIE_LOGO_RGB.png" alt="N-ERGIE Logo">
+<img src="N-ERGIE_LOGO_RGB.png" alt="N-ERGIE Logo">
 </div>
 
 <h1>Herzlich Willkommen</h1>
 <p>
 Auf dieser Seite können Sie eine Beispiel-Netzentgeltrechnung einsehen.
-Die Darstellung basiert auf der Auswahl des zuständigen Netzbetreibers
-sowie der Spannungsebene des Netzanschlusses.
+Die Darstellung basiert auf der Auswahl des zuständigen Netzbetreibers sowie
+der Spannungsebene des Netzanschlusses.
 </p>
 <p>
 Die angezeigten Werte sind vordefiniert und dienen ausschließlich zur Orientierung.
@@ -152,39 +119,37 @@ Die angezeigten Werte sind vordefiniert und dienen ausschließlich zur Orientier
 
 <div class="selectors">
 <div>
-  <label><strong>Netzbetreiber</strong></label>
-  <select id="operator">
-    <option value="">Bitte auswählen …</option>
-    <option value="A">Netzbetreiber A</option>
-    <option value="B">Netzbetreiber B</option>
-  </select>
+<h3>Netzbetreiber</h3>
+<p>Bitte wählen Sie den Netzbetreiber aus, der für Ihren Netzanschluss zuständig ist.</p>
+<select id="operator">
+<option value="">Bitte auswählen …</option>
+<option value="A">Netzbetreiber A</option>
+<option value="B">Netzbetreiber B</option>
+</select>
 </div>
 
 <div>
-  <label><strong>Spannungsebene</strong></label>
-  <select id="voltage">
-    <option value="">Bitte auswählen …</option>
-    <option value="A">Spannungsebene A</option>
-    <option value="B">Spannungsebene B</option>
-  </select>
+<h3>Spannungsebene</h3>
+<p>Bitte wählen Sie die Spannungsebene Ihres Netzanschlusses aus.</p>
+<select id="voltage">
+<option value="">Bitte auswählen …</option>
+<option value="A">Spannungsebene A</option>
+<option value="B">Spannungsebene B</option>
+</select>
 </div>
-</div>
-
-<div class="toggle">
-<button id="btn2025" class="active">2025</button>
-<button id="btn2026">2026</button>
 </div>
 
 <div id="result" class="result">
-
 <h2>Beispiel-Netzentgeltrechnung</h2>
+<p>
+Nachfolgend ist eine unverbindliche Beispiel-Netzentgeltrechnung dargestellt,
+die auf der ausgewählten Kombination aus Netzbetreiber und Spannungsebene basiert.
+</p>
 
 <div id="tableContainer"></div>
 
-<canvas id="chart" width="500" height="180"></canvas>
-
 <div class="actions">
-  <button onclick="window.print()">PDF exportieren</button>
+<button onclick="window.print()">PDF / Drucken</button>
 </div>
 
 <div class="disclaimer">
@@ -193,113 +158,102 @@ ausschließlich zur Orientierung. Sie ersetzen keine individuelle Netzentgeltabr
 und stellen weder ein Angebot noch eine verbindliche Aussage über tatsächlich anfallende
 Netzentgelte dar.
 </div>
-
 </div>
-
-<footer>Unverbindliche Beispielrechnung · Stand 2026</footer>
 
 </div>
 </div>
 
 <script>
-// ===============================
-// DATEN – 4 Kombinationen (FINAL)
-// ===============================
-const DATA = {
-  "A|A": {
-    "2025": {arbeits:71590.09,leistung:325103.76,grund:0,mess:773.80,u17:47883.21,u19:18014.02,kwkg:16254.84,konz:6454.84,sum:486074.19},
-    "2026": {arbeits:89194.21,leistung:199561.10,grund:0,mess:773.80,u17:55218.26,u19:18024.02,kwkg:26171.46,konz:6454.84,sum:395397.69}
-  },
-  "A|B": {
-    "2025": {arbeits:2,leistung:325103.76,grund:0,mess:2,u17:47883.21,u19:18014.02,kwkg:2,konz:6454.84,sum:486074.19},
-    "2026": {arbeits:89194.21,leistung:199561.10,grund:0,mess:773.80,u17:55218.26,u19:2,kwkg:26171.46,konz:2,sum:395397.69}
-  },
-  "B|A": {
-    "2025": {arbeits:1,leistung:325103.76,grund:0,mess:773.80,u17:1,u19:18014.02,kwkg:16254.84,konz:1,sum:486074.19},
-    "2026": {arbeits:89194.21,leistung:199561.10,grund:0,mess:1,u17:55218.26,u19:18024.02,kwkg:1,konz:6454.84,sum:395397.69}
-  },
-  "B|B": {
-    "2025": {arbeits:71590.09,leistung:325103.76,grund:0,mess:773.80,u17:47883.21,u19:3,kwkg:16254.84,konz:3,sum:486074.19},
-    "2026": {arbeits:89194.21,leistung:199561.10,grund:0,mess:773.80,u17:3,u19:18024.02,kwkg:3,konz:6454.84,sum:395397.69}
-  }
-};
+const tables = {
 
-// ===============================
-// LOGIK
-// ===============================
-let year="2025";
+"A|A": `
+<table>
+<thead><tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr></thead>
+<tbody>
+<tr><td>Arbeitskosten HT €</td><td>71.590,09 €</td><td>89.194,21 €</td><td class="pos">17.604,12 €</td><td class="pos">24,59</td></tr>
+<tr><td>Leistungskosten €</td><td>325.103,76 €</td><td>199.561,10 €</td><td class="neg">-125.542,66 €</td><td class="neg">-38,62</td></tr>
+<tr><td>Grundkosten €</td><td>0,00 €</td><td>0,00 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Messkosten €</td><td>773,80 €</td><td>773,80 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Kosten Umlage §17 €</td><td>47.883,21 €</td><td>55.218,26 €</td><td class="pos">7.335,05 €</td><td class="pos">15,32</td></tr>
+<tr><td>Kosten Umlage §19 €</td><td>18.014,02 €</td><td>18.024,02 €</td><td class="pos">10,00 €</td><td class="pos">0,06</td></tr>
+<tr><td>KWKG-Umlage €</td><td>16.254,84 €</td><td>26.171,46 €</td><td class="pos">9.916,62 €</td><td class="pos">61,01</td></tr>
+<tr><td>Konzessionsabgabe €</td><td>6.454,84 €</td><td>6.454,84 €</td><td>0,00 €</td><td>0</td></tr>
+</tbody>
+<tfoot>
+<tr><td>Netzentgeltsumme</td><td>486.074,19 €</td><td>395.397,69 €</td><td class="neg">-90.676,50 €</td><td></td></tr>
+</tfoot>
+</table>`,
+
+"A|B": `
+<table>
+<thead><tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr></thead>
+<tbody>
+<tr><td>Arbeitskosten HT €</td><td>2,00 €</td><td>89.194,21 €</td><td class="pos">89.192,21 €</td><td></td></tr>
+<tr><td>Leistungskosten €</td><td>325.103,76 €</td><td>199.561,10 €</td><td class="neg">-125.542,66 €</td><td></td></tr>
+<tr><td>Grundkosten €</td><td>0,00 €</td><td>0,00 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Messkosten €</td><td>2,00 €</td><td>773,80 €</td><td class="pos">771,80 €</td><td></td></tr>
+<tr><td>Kosten Umlage §17 €</td><td>47.883,21 €</td><td>55.218,26 €</td><td class="pos">7.335,05 €</td><td></td></tr>
+<tr><td>Kosten Umlage §19 €</td><td>18.014,02 €</td><td>2,00 €</td><td class="neg">-18.012,02 €</td><td></td></tr>
+<tr><td>KWKG-Umlage €</td><td>2,00 €</td><td>26.171,46 €</td><td class="pos">26.169,46 €</td><td></td></tr>
+<tr><td>Konzessionsabgabe €</td><td>6.454,84 €</td><td>2,00 €</td><td class="neg">-6.452,84 €</td><td></td></tr>
+</tbody>
+<tfoot>
+<tr><td>Netzentgeltsumme</td><td>486.074,19 €</td><td>395.397,69 €</td><td class="neg">-90.676,50 €</td><td></td></tr>
+</tfoot>
+</table>`,
+
+"B|A": `
+<table>
+<thead><tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr></thead>
+<tbody>
+<tr><td>Arbeitskosten HT €</td><td>1,00 €</td><td>89.194,21 €</td><td class="pos">89.193,21 €</td><td></td></tr>
+<tr><td>Leistungskosten €</td><td>325.103,76 €</td><td>199.561,10 €</td><td class="neg">-125.542,66 €</td><td></td></tr>
+<tr><td>Grundkosten €</td><td>0,00 €</td><td>0,00 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Messkosten €</td><td>773,80 €</td><td>1,00 €</td><td class="neg">-772,80 €</td><td></td></tr>
+<tr><td>Kosten Umlage §17 €</td><td>1,00 €</td><td>55.218,26 €</td><td class="pos">55.217,26 €</td><td></td></tr>
+<tr><td>Kosten Umlage §19 €</td><td>18.014,02 €</td><td>18.024,02 €</td><td class="pos">10,00 €</td><td></td></tr>
+<tr><td>KWKG-Umlage €</td><td>16.254,84 €</td><td>1,00 €</td><td class="neg">-16.253,84 €</td><td></td></tr>
+<tr><td>Konzessionsabgabe €</td><td>1,00 €</td><td>6.454,84 €</td><td class="pos">6.453,84 €</td><td></td></tr>
+</tbody>
+<tfoot>
+<tr><td>Netzentgeltsumme</td><td>486.074,19 €</td><td>395.397,69 €</td><td class="neg">-90.676,50 €</td><td></td></tr>
+</tfoot>
+</table>`,
+
+"B|B": `
+<table>
+<thead><tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr></thead>
+<tbody>
+<tr><td>Arbeitskosten HT €</td><td>71.590,09 €</td><td>89.194,21 €</td><td class="pos">17.604,12 €</td><td></td></tr>
+<tr><td>Leistungskosten €</td><td>325.103,76 €</td><td>199.561,10 €</td><td class="neg">-125.542,66 €</td><td></td></tr>
+<tr><td>Grundkosten €</td><td>0,00 €</td><td>0,00 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Messkosten €</td><td>773,80 €</td><td>773,80 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Kosten Umlage §17 €</td><td>47.883,21 €</td><td>3,00 €</td><td class="neg">-47.880,21 €</td><td></td></tr>
+<tr><td>Kosten Umlage §19 €</td><td>3,00 €</td><td>18.024,02 €</td><td class="pos">18.021,02 €</td><td></td></tr>
+<tr><td>KWKG-Umlage €</td><td>16.254,84 €</td><td>3,00 €</td><td class="neg">-16.251,84 €</td><td></td></tr>
+<tr><td>Konzessionsabgabe €</td><td>3,00 €</td><td>6.454,84 €</td><td class="pos">6.451,84 €</td><td></td></tr>
+</tbody>
+<tfoot>
+<tr><td>Netzentgeltsumme</td><td>486.074,19 €</td><td>395.397,69 €</td><td class="neg">-90.676,50 €</td><td></td></tr>
+</tfoot>
+</table>`
+};
 
 const op=document.getElementById("operator");
 const vo=document.getElementById("voltage");
 const res=document.getElementById("result");
-const table=document.getElementById("tableContainer");
-const ctx=document.getElementById("chart").getContext("2d");
-
-function euro(x){
-  return x.toLocaleString("de-DE",{style:"currency",currency:"EUR"});
-}
-
-function render(){
-  const key=op.value+"|"+vo.value;
-  const d25=DATA[key]["2025"];
-  const d26=DATA[key]["2026"];
-  const d=DATA[key][year];
-
-  table.innerHTML=`
-  <table>
-    <tr>
-      <th></th><th>${year}</th><th>Δ €</th><th>Δ %</th>
-    </tr>
-    <tr>
-      <td>Arbeitskosten</td>
-      <td>${euro(d.arbeits)}</td>
-      <td class="${d26.arbeits-d25.arbeits>=0?'pos':'neg'}">${euro(d26.arbeits-d25.arbeits)}</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Leistungskosten</td>
-      <td>${euro(d.leistung)}</td>
-      <td class="${d26.leistung-d25.leistung>=0?'pos':'neg'}">${euro(d26.leistung-d25.leistung)}</td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>Netzentgeltsumme</td>
-      <td>${euro(d.sum)}</td>
-      <td class="${d26.sum-d25.sum>=0?'pos':'neg'}">${euro(d26.sum-d25.sum)}</td>
-      <td></td>
-    </tr>
-  </table>
-  `;
-
-  drawChart(d25.sum,d26.sum);
-}
-
-function drawChart(v25,v26){
-  ctx.clearRect(0,0,500,200);
-  ctx.fillStyle="#005ea8";
-  ctx.fillRect(120,50,v25/4000,40);
-  ctx.fillStyle="#9bbcdf";
-  ctx.fillRect(120,110,v26/4000,40);
-  ctx.fillStyle="#000";
-  ctx.fillText("2025",40,75);
-  ctx.fillText("2026",40,135);
-}
+const tc=document.getElementById("tableContainer");
 
 function update(){
-  if(op.value && vo.value){
-    res.style.display="block";
-    render();
-  } else {
+  if(!op.value||!vo.value){
     res.style.display="none";
+    return;
   }
+  tc.innerHTML=tables[op.value+"|"+vo.value];
+  res.style.display="block";
 }
-
-op.onchange=update;
-vo.onchange=update;
-
-btn2025.onclick=()=>{year="2025";btn2025.classList.add("active");btn2026.classList.remove("active");render();};
-btn2026.onclick=()=>{year="2026";btn2026.classList.add("active");btn2025.classList.remove("active");render();};
+op.addEventListener("change",update);
+vo.addEventListener("change",update);
 </script>
-
 </body>
 </html>

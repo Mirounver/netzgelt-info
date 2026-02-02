@@ -1,125 +1,204 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Netzentgelt-Info (unverbindlich)</title>
-  <style>
-    body { font-family: system-ui, Arial, sans-serif; margin: 24px; line-height: 1.4; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; max-width: 720px; }
-    .row { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
-    label { font-weight: 600; display: block; margin-bottom: 6px; }
-    select { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; }
-    .result { margin-top: 16px; padding: 14px; border-radius: 12px; border: 1px solid #cfe3ff; background: #f5f9ff; display:none; }
-    .muted { color: #555; font-size: 0.95rem; }
-    .warn { margin-top: 10px; font-size: 0.9rem; color: #444; }
-    .badge { display:inline-block; padding: 2px 10px; border-radius: 999px; border: 1px solid #ddd; font-size: 0.85rem; background:#fff; }
-  </style>
+<meta charset="utf-8">
+<title>Beispiel-Netzentgeltrechnung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:#f4f6f8;
+  color:#1a1a1a;
+}
+.page{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px 20px;
+}
+.card{
+  background:#fff;
+  max-width:1200px;
+  width:100%;
+  padding:48px;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.08);
+  text-align:center;
+}
+.logo img{max-height:60px;margin-bottom:24px}
+h1{margin-top:0}
+h2{margin-top:48px}
+p{color:#444;line-height:1.6}
+
+.selectors{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  margin:40px 0;
+  text-align:left;
+}
+select{
+  width:100%;
+  padding:12px;
+  font-size:1rem;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:8px;
+}
+
+.result{display:none;text-align:left;margin-top:32px}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  font-size:.95rem;
+}
+th,td{
+  padding:10px 12px;
+  border-bottom:1px solid #ddd;
+}
+th{text-align:center;background:#f0f3f7}
+td:first-child{font-weight:500}
+td:not(:first-child){text-align:right;white-space:nowrap}
+tfoot td{font-weight:700;background:#f9fafb}
+
+.pos{color:#0a7a2f;font-weight:600}
+.neg{color:#b00020;font-weight:600}
+
+.disclaimer{
+  margin-top:32px;
+  font-size:.9rem;
+  color:#555;
+  background:#f5f7fa;
+  padding:16px;
+  border-radius:10px;
+}
+
+.actions{
+  margin-top:24px;
+  text-align:right;
+}
+button{
+  padding:10px 16px;
+  border-radius:10px;
+  border:0;
+  background:#005ea8;
+  color:#fff;
+  cursor:pointer;
+}
+button:hover{background:#004a86}
+
+@media(max-width:900px){
+  .selectors{grid-template-columns:1fr}
+  .card{padding:32px 24px}
+}
+</style>
 </head>
 
 <body>
-  <div class="card">
-    <h1 style="margin-top:0;">Netzentgelt-Info (unverbindlich)</h1>
-    <p class="muted">
-      Bitte wählen Sie Netzbetreiber und Spannungsebene aus. Es wird ein Beispiel-/Info-Ergebnis angezeigt.
-    </p>
+<div class="page">
+<div class="card">
 
-    <div class="row">
-      <div>
-        <label for="operator">Netzbetreiber</label>
-        <select id="operator">
-          <option value="">Bitte auswählen …</option>
-          <option value="A">Netzbetreiber A</option>
-          <option value="B">Netzbetreiber B</option>
-          <option value="C">Netzbetreiber C</option>
-        </select>
-      </div>
+<div class="logo">
+<img src="N-ERGIE_LOGO_RGB.png" alt="N-ERGIE Logo">
+</div>
 
-      <div>
-        <label for="voltage">Spannungsebene</label>
-        <select id="voltage">
-          <option value="">Bitte auswählen …</option>
-          <option value="LV">Niederspannung (LV)</option>
-          <option value="MV">Mittelspannung (MV)</option>
-          <option value="HV">Hochspannung (HV)</option>
-        </select>
-      </div>
-    </div>
+<h1>Herzlich Willkommen</h1>
+<p>
+Auf dieser Seite können Sie eine Beispiel-Netzentgeltrechnung einsehen.
+Die Darstellung basiert auf der Auswahl des zuständigen Netzbetreibers sowie
+der Spannungsebene des Netzanschlusses.
+</p>
+<p>
+Die angezeigten Werte sind vordefiniert und dienen ausschließlich zur Orientierung.
+</p>
 
-    <div id="resultBox" class="result">
-      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-        <span class="badge" id="chosenOperator"></span>
-        <span class="badge" id="chosenVoltage"></span>
-      </div>
+<div class="selectors">
+<div>
+<h3>Netzbetreiber</h3>
+<p>Bitte wählen Sie den Netzbetreiber aus, der für Ihren Netzanschluss zuständig ist.</p>
+<select id="operator">
+<option value="">Bitte auswählen …</option>
+<option value="A">Netzbetreiber A</option>
+<option value="B">Netzbetreiber B</option>
+</select>
+</div>
 
-      <h2 style="margin:10px 0 6px;">Ergebnis (Beispiel/Info)</h2>
-      <p id="resultText" style="margin:0;"></p>
+<div>
+<h3>Spannungsebene</h3>
+<p>Bitte wählen Sie die Spannungsebene Ihres Netzanschlusses aus.</p>
+<select id="voltage">
+<option value="">Bitte auswählen …</option>
+<option value="A">Spannungsebene A</option>
+<option value="B">Spannungsebene B</option>
+</select>
+</div>
+</div>
 
-      <p class="warn">
-        Hinweis: Diese Anzeige dient nur zur Orientierung/Information und ist nicht verbindlich.
-      </p>
-    </div>
+<div id="result" class="result">
+<h2>Beispiel-Netzentgeltrechnung</h2>
+<p>
+Nachfolgend ist eine unverbindliche Beispiel-Netzentgeltrechnung dargestellt,
+die auf der ausgewählten Kombination aus Netzbetreiber und Spannungsebene basiert.
+</p>
 
-    <p id="hint" class="muted" style="margin:16px 0 0;">
-      Wähle beide Dropdowns, um das Ergebnis zu sehen.
-    </p>
-  </div>
+<div id="tableContainer"></div>
 
-  <script>
-    // 1) Mapping: (Netzbetreiber + Spannungsebene) -> Ergebnistext
-    // Schlüssel-Format: "A|LV" usw.
-    const RESULTS = {
-      "A|LV": "Beispiel: Für Netzbetreiber A in LV gilt Info-Text/Beispielwert X (z. B. 12,34 ct/kWh). Annahmen: …",
-      "A|MV": "Beispiel: Netzbetreiber A, MV → Info-Text/Beispielwert Y. Annahmen: …",
-      "A|HV": "Beispiel: Netzbetreiber A, HV → Info-Text/Beispielwert Z. Annahmen: …",
+<div class="actions">
+<button onclick="window.print()">PDF / Drucken</button>
+</div>
 
-      "B|LV": "Beispiel: Netzbetreiber B, LV → …",
-      "B|MV": "Beispiel: Netzbetreiber B, MV → …",
-      "B|HV": "Beispiel: Netzbetreiber B, HV → …",
+<div class="disclaimer">
+Die dargestellten Werte stellen eine unverbindliche Beispielrechnung dar und dienen
+ausschließlich zur Orientierung. Sie ersetzen keine individuelle Netzentgeltabrechnung
+und stellen weder ein Angebot noch eine verbindliche Aussage über tatsächlich anfallende
+Netzentgelte dar.
+</div>
+</div>
 
-      "C|LV": "Beispiel: Netzbetreiber C, LV → …",
-      "C|MV": "Beispiel: Netzbetreiber C, MV → …",
-      "C|HV": "Beispiel: Netzbetreiber C, HV → …"
-    };
+</div>
+</div>
 
-    const operatorEl = document.getElementById("operator");
-    const voltageEl  = document.getElementById("voltage");
-    const resultBox  = document.getElementById("resultBox");
-    const resultText = document.getElementById("resultText");
-    const hint       = document.getElementById("hint");
-    const chosenOperator = document.getElementById("chosenOperator");
-    const chosenVoltage  = document.getElementById("chosenVoltage");
+<script>
+const tables={
+"A|A":`<table>
+<thead><tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr></thead>
+<tbody>
+<tr><td>Arbeitskosten HT €</td><td>71.590,09 €</td><td>89.194,21 €</td><td class="pos">17.604,12 €</td><td class="pos">24,59</td></tr>
+<tr><td>Leistungskosten €</td><td>325.103,76 €</td><td>199.561,10 €</td><td class="neg">-125.542,66 €</td><td class="neg">-38,62</td></tr>
+<tr><td>Grundkosten €</td><td>0,00 €</td><td>0,00 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Messkosten €</td><td>773,80 €</td><td>773,80 €</td><td>0,00 €</td><td>0</td></tr>
+<tr><td>Kosten Umlage §17 €</td><td>47.883,21 €</td><td>55.218,26 €</td><td class="pos">7.335,05 €</td><td class="pos">15,32</td></tr>
+<tr><td>Kosten Umlage §19 €</td><td>18.014,02 €</td><td>18.024,02 €</td><td class="pos">10,00 €</td><td class="pos">0,06</td></tr>
+<tr><td>KWKG-Umlage €</td><td>16.254,84 €</td><td>26.171,46 €</td><td class="pos">9.916,62 €</td><td class="pos">61,01</td></tr>
+<tr><td>Konzessionsabgabe €</td><td>6.454,84 €</td><td>6.454,84 €</td><td>0,00 €</td><td>0</td></tr>
+</tbody>
+<tfoot>
+<tr><td>Netzentgeltsumme</td><td>486.074,19 €</td><td>395.397,69 €</td><td class="neg">-90.676,50 €</td><td></td></tr>
+</tfoot>
+</table>`,
 
-    function update() {
-      const op = operatorEl.value;
-      const v  = voltageEl.value;
+"A|B":`<table>… (identisch befüllt wie Excel-Block A/B) …</table>`,
+"B|A":`<table>… (identisch befüllt wie Excel-Block B/A) …</table>`,
+"B|B":`<table>… (identisch befüllt wie Excel-Block B/B) …</table>`
+};
 
-      // Wenn noch nicht beide gewählt: Ergebnis ausblenden
-      if (!op || !v) {
-        resultBox.style.display = "none";
-        hint.style.display = "block";
-        return;
-      }
+const op=document.getElementById("operator");
+const vo=document.getElementById("voltage");
+const res=document.getElementById("result");
+const tc=document.getElementById("tableContainer");
 
-      const key = `${op}|${v}`;
-      const text = RESULTS[key];
-
-      // Labels für Anzeige
-      const opLabel = operatorEl.options[operatorEl.selectedIndex].text;
-      const vLabel  = voltageEl.options[voltageEl.selectedIndex].text;
-
-      chosenOperator.textContent = opLabel;
-      chosenVoltage.textContent  = vLabel;
-
-      // Wenn Kombination nicht gepflegt wurde, fallback anzeigen
-      resultText.textContent = text ?? "Für diese Kombination ist aktuell kein Info-Ergebnis hinterlegt.";
-
-      hint.style.display = "none";
-      resultBox.style.display = "block";
-    }
-
-    operatorEl.addEventListener("change", update);
-    voltageEl.addEventListener("change", update);
-  </script>
+function update(){
+if(!op.value||!vo.value){res.style.display="none";return;}
+tc.innerHTML=tables[op.value+"|"+vo.value];
+res.style.display="block";
+}
+op.addEventListener("change",update);
+vo.addEventListener("change",update);
+</script>
 </body>
 </html>

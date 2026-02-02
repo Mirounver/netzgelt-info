@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Netzentgelt-Info (unverbindlich)</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 24px; line-height: 1.4; }
+    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; max-width: 720px; }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
+    label { font-weight: 600; display: block; margin-bottom: 6px; }
+    select { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid #ccc; }
+    .result { margin-top: 16px; padding: 14px; border-radius: 12px; border: 1px solid #cfe3ff; background: #f5f9ff; display:none; }
+    .muted { color: #555; font-size: 0.95rem; }
+    .warn { margin-top: 10px; font-size: 0.9rem; color: #444; }
+    .badge { display:inline-block; padding: 2px 10px; border-radius: 999px; border: 1px solid #ddd; font-size: 0.85rem; background:#fff; }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1 style="margin-top:0;">Netzentgelt-Info (unverbindlich)</h1>
+    <p class="muted">
+      Bitte wählen Sie Netzbetreiber und Spannungsebene aus. Es wird ein Beispiel-/Info-Ergebnis angezeigt.
+    </p>
+
+    <div class="row">
+      <div>
+        <label for="operator">Netzbetreiber</label>
+        <select id="operator">
+          <option value="">Bitte auswählen …</option>
+          <option value="A">Netzbetreiber A</option>
+          <option value="B">Netzbetreiber B</option>
+          <option value="C">Netzbetreiber C</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="voltage">Spannungsebene</label>
+        <select id="voltage">
+          <option value="">Bitte auswählen …</option>
+          <option value="LV">Niederspannung (LV)</option>
+          <option value="MV">Mittelspannung (MV)</option>
+          <option value="HV">Hochspannung (HV)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="resultBox" class="result">
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <span class="badge" id="chosenOperator"></span>
+        <span class="badge" id="chosenVoltage"></span>
+      </div>
+
+      <h2 style="margin:10px 0 6px;">Ergebnis (Beispiel/Info)</h2>
+      <p id="resultText" style="margin:0;"></p>
+
+      <p class="warn">
+        Hinweis: Diese Anzeige dient nur zur Orientierung/Information und ist nicht verbindlich.
+      </p>
+    </div>
+
+    <p id="hint" class="muted" style="margin:16px 0 0;">
+      Wähle beide Dropdowns, um das Ergebnis zu sehen.
+    </p>
+  </div>
+
+  <script>
+    // 1) Mapping: (Netzbetreiber + Spannungsebene) -> Ergebnistext
+    // Schlüssel-Format: "A|LV" usw.
+    const RESULTS = {
+      "A|LV": "Beispiel: Für Netzbetreiber A in LV gilt Info-Text/Beispielwert X (z. B. 12,34 ct/kWh). Annahmen: …",
+      "A|MV": "Beispiel: Netzbetreiber A, MV → Info-Text/Beispielwert Y. Annahmen: …",
+      "A|HV": "Beispiel: Netzbetreiber A, HV → Info-Text/Beispielwert Z. Annahmen: …",
+
+      "B|LV": "Beispiel: Netzbetreiber B, LV → …",
+      "B|MV": "Beispiel: Netzbetreiber B, MV → …",
+      "B|HV": "Beispiel: Netzbetreiber B, HV → …",
+
+      "C|LV": "Beispiel: Netzbetreiber C, LV → …",
+      "C|MV": "Beispiel: Netzbetreiber C, MV → …",
+      "C|HV": "Beispiel: Netzbetreiber C, HV → …"
+    };
+
+    const operatorEl = document.getElementById("operator");
+    const voltageEl  = document.getElementById("voltage");
+    const resultBox  = document.getElementById("resultBox");
+    const resultText = document.getElementById("resultText");
+    const hint       = document.getElementById("hint");
+    const chosenOperator = document.getElementById("chosenOperator");
+    const chosenVoltage  = document.getElementById("chosenVoltage");
+
+    function update() {
+      const op = operatorEl.value;
+      const v  = voltageEl.value;
+
+      // Wenn noch nicht beide gewählt: Ergebnis ausblenden
+      if (!op || !v) {
+        resultBox.style.display = "none";
+        hint.style.display = "block";
+        return;
+      }
+
+      const key = `${op}|${v}`;
+      const text = RESULTS[key];
+
+      // Labels für Anzeige
+      const opLabel = operatorEl.options[operatorEl.selectedIndex].text;
+      const vLabel  = voltageEl.options[voltageEl.selectedIndex].text;
+
+      chosenOperator.textContent = opLabel;
+      chosenVoltage.textContent  = vLabel;
+
+      // Wenn Kombination nicht gepflegt wurde, fallback anzeigen
+      resultText.textContent = text ?? "Für diese Kombination ist aktuell kein Info-Ergebnis hinterlegt.";
+
+      hint.style.display = "none";
+      resultBox.style.display = "block";
+    }
+
+    operatorEl.addEventListener("change", update);
+    voltageEl.addEventListener("change", update);
+  </script>
+</body>
+</html>

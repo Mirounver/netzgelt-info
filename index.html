@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Beispiel-Netzentgeltrechnung</title>
+<title>Netzentgeltvergleich nach Verbrauch und Spannungsebene</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -173,10 +173,37 @@ button:hover{opacity:.9}
 
 /* Druckoptimierung */
 @media print{
-  .selectors,.actions,.hint{display:none}
-  body{background:#fff}
-  .card{box-shadow:none;padding:0}
+  .selectors,
+  .actions,
+  .hint,
+  p,
+  h1 {
+    display:none;
+  }
+
+  body{
+    background:#fff;
+  }
+
+  .card{
+    box-shadow:none;
+    padding:0;
+  }
+
+  table{
+    font-size:0.9rem;
+  }
+
+  tr, td, th{
+    page-break-inside:avoid;
+  }
+
+  @page{
+    size:A4;
+    margin:15mm;
+  }
 }
+
 </style>
 </head>
 
@@ -188,12 +215,12 @@ button:hover{opacity:.9}
 <img src="N-ERGIE_LOGO_RGB.png" alt="N-ERGIE Logo">
 </div>
 
-<h1>Beispiel-Netzentgeltrechnung</h1>
+<h1>Netzentgeltvergleich nach Verbrauch und Spannungsebene</h1>
 
 <p>
-Auf dieser Seite können Sie eine unverbindliche Beispiel-Netzentgeltrechnung einsehen.
-Die Darstellung basiert auf der Auswahl des zuständigen Netzbetreibers sowie der
-Spannungsebene des Netzanschlusses.
+Auf dieser Seite erhalten Sie eine vergleichende Übersicht der Netzentgelte für unterschiedliche Verbrauchs- und Leistungsszenarien.
+Die Darstellung basiert auf der Auswahl des Netzbetreibers, eines definierten Verbrauchs- und Leistungsprofils sowie der verfügbaren Spannungsebene.
+Die ausgewiesenen Werte zeigen einen Vergleich zwischen den Jahren 2025 und 2026.
 </p>
 
 <div class="selectors">
@@ -228,7 +255,7 @@ Bitte wählen Sie Netzbetreiber und Spannungsebene aus.
 </div>
 
 <div id="result" class="result">
-<h2>Beispiel-Netzentgeltrechnung</h2>
+<h2>Netzentgeltvergleich nach Verbrauch und Spannungsebene</h2>
 
 <div id="context" class="context"></div>
 <div id="tableContainer"></div>
@@ -239,12 +266,13 @@ Bitte wählen Sie Netzbetreiber und Spannungsebene aus.
 </div>
 
 <div class="disclaimer">
-Die dargestellten Werte stellen eine unverbindliche Beispielrechnung dar und dienen
-ausschließlich zur Orientierung. Sie ersetzen keine individuelle Netzentgeltabrechnung
-und stellen weder ein Angebot noch eine verbindliche Aussage über tatsächlich anfallende
-Netzentgelte dar.
-<br><br>
-<strong>Datenstand:</strong> Netzentgelte 2025 / 2026
+  <strong>Hinweis:</strong><br>
+  Die dargestellten Netzentgelte stellen eine modellhafte Vergleichsrechnung dar und dienen ausschließlich der Orientierung.
+  Die Berechnung basiert auf definierten Verbrauchs- und Leistungsszenarien und ersetzt keine individuelle Netzentgeltabrechnung.
+  Maßgeblich für die Abrechnung sind ausschließlich die vertraglich vereinbarten sowie die vom jeweiligen Netzbetreiber
+  veröffentlichten Netzentgelte.
+  <br><br>
+  <strong>Datenstand:</strong> Netzentgelte 2025 / 2026
 </div>
 </div>
 
@@ -380,7 +408,10 @@ function render(){
     sum25 += v25;
     sum26 += v26;
 
-    const cls = d < 0 ? "neg" : "pos";
+    let cls = "";
+if (d > 0) cls = "pos";
+else if (d < 0) cls = "neg";
+
     html += `<tr>
       <td>${label}</td>
       <td>${fmtEUR(v25)}</td>
@@ -398,7 +429,7 @@ function render(){
       <td>Netzentgeltsumme</td>
       <td>${fmtEUR(sum25)}</td>
       <td>${fmtEUR(sum26)}</td>
-      <td class="${sd<0?"neg":"pos"}">${fmtEUR(sd)}</td>
+      <td class="${sd > 0 ? "pos" : sd < 0 ? "neg" : ""}">${fmtEUR(sd)}</td>
       <td>${fmtPct(sp)}</td>
     </tr>
   </tfoot></table>`;
@@ -406,10 +437,11 @@ function render(){
   tc.innerHTML = html;
 
   ctx.innerHTML = `
-    Netzbetreiber: <strong>${r.operator_name}</strong> &nbsp;|&nbsp;
-    Szenario: <strong>${r.verbrauch_mwh} MWh / ${r.leistung_kw} kW</strong> &nbsp;|&nbsp;
-    Spannungsebene: <strong>${voSel.options[voSel.selectedIndex].text}</strong>
-  `;
+  Netzbetreiber: <strong>${r.operator_name}</strong> &nbsp;|&nbsp;
+  Verbrauch &amp; Leistung: <strong>${Number(r.verbrauch_mwh).toLocaleString("de-DE")} MWh / ${Number(r.leistung_kw).toLocaleString("de-DE")} kW</strong> &nbsp;|&nbsp;
+  Spannungsebene: <strong>${voSel.options[voSel.selectedIndex].text}</strong>
+`;
+
 
   hint.style.display="none";
   res.style.display="block";

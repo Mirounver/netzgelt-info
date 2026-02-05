@@ -50,7 +50,10 @@ h1{
 h2{
   color:var(--ner-violet);
   font-weight:700;
+  text-align:center;
+  margin-top:24px;
 }
+
 
 h3,strong{
   color:var(--ner-violet);
@@ -202,6 +205,13 @@ button:hover{opacity:.9}
 
   tr, td, th{
     page-break-inside:avoid;
+  }
+
+  /* HIER EINFÜGEN (Tabellenkopf im Druck) */
+  thead th{
+    background:var(--ner-violet) !important;
+    color:#fff !important;
+    font-weight:700;
   }
 
   @page{
@@ -479,9 +489,9 @@ else if (d < 0) cls = "neg";
   tc.innerHTML = html;
 
   ctx.innerHTML = `
-  Netzbetreiber: <strong>${r.operator_name}</strong> &nbsp;|&nbsp;
-  Verbrauch &amp; Leistung: <strong>${Number(r.verbrauch_mwh).toLocaleString("de-DE")} MWh / ${Number(r.leistung_kw).toLocaleString("de-DE")} kW</strong> &nbsp;|&nbsp;
-  Spannungsebene: <strong>${voSel.options[voSel.selectedIndex].text}</strong>
+  <div>Netzbetreiber: <strong>${r.operator_name}</strong></div>
+  <div>Verbrauch &amp; Leistung: <strong>${Number(r.verbrauch_mwh).toLocaleString("de-DE")} MWh / ${Number(r.leistung_kw).toLocaleString("de-DE")} kW</strong></div>
+  <div>Spannungsebene: <strong>${voSel.options[voSel.selectedIndex].text}</strong></div>
 `;
 
 

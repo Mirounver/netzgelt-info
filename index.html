@@ -251,7 +251,7 @@ Die ausgewiesenen Werte zeigen einen Vergleich zwischen den Jahren 2025 und 2026
 </div>
 
 <div id="hint" class="hint">
-Bitte wählen Sie Netzbetreiber und Spannungsebene aus.
+Bitte wählen Sie den Netzbetreiber, den Verbrauch und die Spannungsebene aus.
 </div>
 
 <div id="result" class="result">
@@ -296,7 +296,8 @@ fetch(CSV_PATH)
   .then(r => r.text())
   .then(text => {
     rows = parseCSV(text, ";");
-    initOperators();
+initOperators();
+updateHintText();
   })
   .catch(err => {
     hint.style.display="block";
@@ -333,37 +334,72 @@ function initOperators(){
     });
 }
 
-opSel.addEventListener("change", updateVoltages);
-scSel.addEventListener("change", updateVoltages);
-voSel.addEventListener("change", render);
+opSel.addEventListener("change", () => {
+  updateVoltages();
+  updateHintText();
+});
 
+scSel.addEventListener("change", () => {
+  updateVoltages();
+  updateHintText();
+});
+
+voSel.addEventListener("change", () => {
+  updateHintText();
+  render();
+});
+
+function updateHintText(){
+  // nichts gewählt
+  if(!opSel.value && !scSel.value && !voSel.value){
+    hint.textContent =
+      "Bitte wählen Sie den Netzbetreiber, den Verbrauch und die Spannungsebene aus.";
+    hint.style.display = "block";
+    return;
+  }
+
+  // nur Netzbetreiber gewählt
+  if(opSel.value && !scSel.value){
+    hint.textContent =
+      "Bitte wählen Sie den Verbrauch und die Spannungsebene aus.";
+    hint.style.display = "block";
+    return;
+  }
+
+  // Netzbetreiber + Verbrauch gewählt
+  if(opSel.value && scSel.value && !voSel.value){
+    hint.textContent =
+      "Bitte wählen Sie die Spannungsebene aus.";
+    hint.style.display = "block";
+    return;
+  }
+
+  // alles gewählt
+  hint.style.display = "none";
+}
+  
 function updateVoltages(){
   voSel.innerHTML = `<option value="">Bitte auswählen …</option>`;
-  res.style.display="none";
-  hint.style.display="block";
-  hint.textContent = "Bitte wählen Sie Netzbetreiber und Szenario aus.";
+  res.style.display = "none";
 
   if(!opSel.value || !scSel.value) return;
 
   const vols = new Set(
     rows
-      .filter(r => r.operator_id===opSel.value && r.szenario_id===scSel.value)
+      .filter(r =>
+        r.operator_id === opSel.value &&
+        r.szenario_id === scSel.value
+      )
       .map(r => r.spannung)
-      .filter(v => v==="NSP" || v==="MSP")
+      .filter(v => v === "NSP" || v === "MSP")
   );
 
   [...vols].sort().forEach(v=>{
     const opt = document.createElement("option");
     opt.value = v;
-    opt.textContent = v==="NSP" ? "Niederspannung" : "Mittelspannung";
+    opt.textContent = v === "NSP" ? "Niederspannung" : "Mittelspannung";
     voSel.appendChild(opt);
   });
-
-  if(vols.size===0){
-    hint.textContent = "Für diese Auswahl sind keine Spannungsdaten vorhanden.";
-  } else {
-    hint.textContent = "Bitte wählen Sie die Spannungsebene aus.";
-  }
 }
 
 function render(){
@@ -445,6 +481,16 @@ else if (d < 0) cls = "neg";
 
   hint.style.display="none";
   res.style.display="block";
+}
+function resetSelection(){
+  opSel.value = "";
+  scSel.value = "";
+  voSel.value = "";
+
+  voSel.innerHTML = `<option value="">Bitte auswählen …</option>`;
+
+  res.style.display = "none";
+  updateHintText();
 }
 
 function toNum(x){

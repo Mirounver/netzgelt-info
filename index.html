@@ -65,10 +65,11 @@ p{
 
 .selectors{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1fr 1fr 1fr;
   gap:40px;
   margin:40px 0;
 }
+
 
 select{
   width:100%;
@@ -196,23 +197,30 @@ Spannungsebene des Netzanschlusses.
 </p>
 
 <div class="selectors">
-<div>
-<strong>Netzbetreiber</strong>
-<select id="operator">
-<option value="">Bitte auswählen …</option>
-<option value="A">Netzbetreiber A</option>
-<option value="B">Netzbetreiber B</option>
-</select>
-</div>
+  <div>
+    <strong>Netzbetreiber</strong>
+    <select id="operator">
+      <option value="">Bitte auswählen …</option>
+    </select>
+  </div>
 
-<div>
-<strong>Spannungsebene</strong>
-<select id="voltage">
-<option value="">Bitte auswählen …</option>
-<option value="A">Hochspannung</option>
-<option value="B">Mittelspannung</option>
-</select>
-</div>
+  <div>
+    <strong>Verbrauch & Leistung</strong>
+    <select id="scenario">
+      <option value="">Bitte auswählen …</option>
+      <option value="S1">1000 MWh / 550 kW</option>
+      <option value="S2">5000 MWh / 1500 kW</option>
+      <option value="S3">20000 MWh / 7000 kW</option>
+      <option value="S4">50000 MWh / 25000 kW</option>
+    </select>
+  </div>
+
+  <div>
+    <strong>Spannungsebene</strong>
+    <select id="voltage">
+      <option value="">Bitte auswählen …</option>
+    </select>
+  </div>
 </div>
 
 <div id="hint" class="hint">
@@ -244,115 +252,184 @@ Netzentgelte dar.
 </div>
 
 <script>
-const data = {
-"A|A": {
-  rows:[
-    ["Arbeitskosten HT","71.590,09 €","89.194,21 €","17.604,12 €","24,59",""],
-    ["Leistungskosten","325.103,76 €","199.561,10 €","-125.542,66 €","-38,62","neg"],
-    ["Grundkosten","0,00 €","0,00 €","0,00 €","0",""],
-    ["Messkosten","773,80 €","773,80 €","0,00 €","0",""],
-    ["Kosten Umlage §17","47.883,21 €","55.218,26 €","7.335,05 €","15,32",""],
-    ["Kosten Umlage §19","18.014,02 €","18.024,02 €","10,00 €","0,06",""],
-    ["KWKG-Umlage","16.254,84 €","26.171,46 €","9.916,62 €","61,01",""],
-    ["Konzessionsabgabe","6.454,84 €","6.454,84 €","0,00 €","0",""]
-  ],
-  sum:["486.074,19 €","395.397,69 €","-90.676,50 €"]
-},
+const CSV_PATH = "netzentgelte.csv"; // liegt im gleichen Ordner wie index.html
 
-"A|B": {
-  rows:[
-    ["Arbeitskosten HT","91.590,09 €","99.194,21 €","17.604,12 €","24,59",""],
-    ["Leistungskosten","325.103,76 €","199.561,10 €","-125.542,66 €","-38,62","neg"],
-    ["Grundkosten","0,00 €","0,00 €","0,00 €","0",""],
-    ["Messkosten","773,80 €","773,80 €","0,00 €","0",""],
-    ["Kosten Umlage §17","47.883,21 €","55.218,26 €","7.335,05 €","15,32",""],
-    ["Kosten Umlage §19","18.014,02 €","18.024,02 €","10,00 €","0,06",""],
-    ["KWKG-Umlage","16.254,84 €","26.171,46 €","9.916,62 €","61,01",""],
-    ["Konzessionsabgabe","6.454,84 €","6.454,84 €","0,00 €","0",""]
-  ],
-  sum:["486.074,19 €","395.397,69 €","-90.676,50 €"]
-},
+const opSel = document.getElementById("operator");
+const scSel = document.getElementById("scenario");
+const voSel = document.getElementById("voltage");
+const res   = document.getElementById("result");
+const tc    = document.getElementById("tableContainer");
+const hint  = document.getElementById("hint");
+const ctx   = document.getElementById("context");
 
-"B|A": {
-  rows:[
-    ["Arbeitskosten HT","61.590,09 €","69.194,21 €","17.604,12 €","24,59",""],
-    ["Leistungskosten","325.103,76 €","199.561,10 €","-125.542,66 €","-38,62","neg"],
-    ["Grundkosten","0,00 €","0,00 €","0,00 €","0",""],
-    ["Messkosten","773,80 €","773,80 €","0,00 €","0",""],
-    ["Kosten Umlage §17","47.883,21 €","55.218,26 €","7.335,05 €","15,32",""],
-    ["Kosten Umlage §1","18.014,02 €","18.024,02 €","10,00 €","0,06",""],
-    ["KWKG-Umlage","16.254,84 €","26.171,46 €","9.916,62 €","61,01",""],
-    ["Konzessionsabgabe","6.454,84 €","6.454,84 €","0,00 €","0",""]
-  ],
-  sum:["486.074,19 €","395.397,69 €","-90.676,50 €"]
-},
+let rows = [];
 
-"B|B": {
-  rows:[
-    ["Arbeitskosten HT","51.590,09 €","59.194,21 €","17.604,12 €","24,59",""],
-    ["Leistungskosten","325.103,76 €","199.561,10 €","-125.542,66 €","-38,62","neg"],
-    ["Grundkosten","0,00 €","0,00 €","0,00 €","0",""],
-    ["Messkosten","773,80 €","773,80 €","0,00 €","0",""],
-    ["Kosten Umlage §17","47.883,21 €","55.218,26 €","7.335,05 €","15,32",""],
-    ["Kosten Umlage §19","18.014,02 €","18.024,02 €","10,00 €","0,06",""],
-    ["KWKG-Umlage","16.254,84 €","26.171,46 €","9.916,62 €","61,01",""],
-    ["Konzessionsabgabe","6.454,84 €","6.454,84 €","0,00 €","0",""]
-  ],
-  sum:["486.074,19 €","395.397,69 €","-90.676,50 €"]
-}
-};
-
-const op = document.getElementById("operator");
-const vo = document.getElementById("voltage");
-const res = document.getElementById("result");
-const tc = document.getElementById("tableContainer");
-const hint = document.getElementById("hint");
-const ctx = document.getElementById("context");
-
-function renderTable(d){
-  let html = `<table>
-  <thead><tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr></thead><tbody>`;
-  d.rows.forEach(r=>{
-    html+=`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>
-    <td class="${r[5]}">${r[3]}</td><td class="${r[5]}">${r[4]}</td></tr>`;
-  });
-  html+=`</tbody><tfoot><tr><td>Netzentgeltsumme</td>
-  <td>${d.sum[0]}</td><td>${d.sum[1]}</td>
-  <td class="neg">${d.sum[2]}</td><td></td></tr></tfoot></table>`;
-  return html;
-}
-
-function update(){
-  if(!op.value || !vo.value){
-    res.style.display="none";
+fetch(CSV_PATH)
+  .then(r => r.text())
+  .then(text => {
+    rows = parseCSV(text, ";");
+    initOperators();
+  })
+  .catch(err => {
     hint.style.display="block";
+    hint.textContent = "CSV konnte nicht geladen werden. Prüfe Dateiname/Pfad.";
+    console.error(err);
+  });
+
+function parseCSV(text, sep){
+  const lines = text.trim().split(/\r?\n/);
+  const header = lines.shift().split(sep).map(h=>h.trim());
+  return lines.map(l => {
+    const vals = l.split(sep);
+    const o = {};
+    header.forEach((h,i)=> o[h]=(vals[i]??"").trim());
+    return o;
+  });
+}
+
+function initOperators(){
+  const seen = new Map();
+  rows.forEach(r=>{
+    if(r.operator_id && !seen.has(r.operator_id)){
+      seen.set(r.operator_id, r.operator_name);
+    }
+  });
+
+  [...seen.entries()]
+    .sort((a,b)=>String(a[1]).localeCompare(String(b[1]),"de"))
+    .forEach(([id,name])=>{
+      const opt = document.createElement("option");
+      opt.value = id;
+      opt.textContent = name;
+      opSel.appendChild(opt);
+    });
+}
+
+opSel.addEventListener("change", updateVoltages);
+scSel.addEventListener("change", updateVoltages);
+voSel.addEventListener("change", render);
+
+function updateVoltages(){
+  voSel.innerHTML = `<option value="">Bitte auswählen …</option>`;
+  res.style.display="none";
+  hint.style.display="block";
+  hint.textContent = "Bitte wählen Sie Netzbetreiber und Szenario aus.";
+
+  if(!opSel.value || !scSel.value) return;
+
+  const vols = new Set(
+    rows
+      .filter(r => r.operator_id===opSel.value && r.szenario_id===scSel.value)
+      .map(r => r.spannung)
+      .filter(v => v==="NSP" || v==="MSP")
+  );
+
+  [...vols].sort().forEach(v=>{
+    const opt = document.createElement("option");
+    opt.value = v;
+    opt.textContent = v==="NSP" ? "Niederspannung" : "Mittelspannung";
+    voSel.appendChild(opt);
+  });
+
+  if(vols.size===0){
+    hint.textContent = "Für diese Auswahl sind keine Spannungsdaten vorhanden.";
+  } else {
+    hint.textContent = "Bitte wählen Sie die Spannungsebene aus.";
+  }
+}
+
+function render(){
+  if(!opSel.value || !scSel.value || !voSel.value) return;
+
+  const r = rows.find(x =>
+    x.operator_id===opSel.value &&
+    x.szenario_id===scSel.value &&
+    x.spannung===voSel.value
+  );
+  if(!r){
+    hint.style.display="block";
+    hint.textContent = "Keine Daten gefunden.";
+    res.style.display="none";
     return;
   }
-  const key = op.value+"|"+vo.value;
-  ctx.innerHTML = `Netzbetreiber: <strong>${op.options[op.selectedIndex].text}</strong> &nbsp;|&nbsp;
-                   Spannungsebene: <strong>${vo.options[vo.selectedIndex].text}</strong>`;
-  tc.innerHTML = renderTable(data[key]);
+
+  const positions = [
+    ["Arbeitskosten HT","arbeitskosten_ht"],
+    ["Leistungskosten","leistungskosten"],
+    ["Grundkosten","grundkosten"],
+    ["Messkosten","messkosten"],
+    ["Kosten Umlage §17","umlage_17"],
+    ["Kosten Umlage §19","umlage_19"],
+    ["KWKG-Umlage","kwkg"],
+    ["Konzessionsabgabe","konzessionsabgabe"]
+  ];
+
+  let sum25=0, sum26=0;
+
+  let html = `<table>
+    <thead>
+      <tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr>
+    </thead><tbody>`;
+
+  for(const [label,key] of positions){
+    const v25 = toNum(r[`${key}_2025`]);
+    const v26 = toNum(r[`${key}_2026`]);
+    const d   = v26 - v25;
+    const p   = v25!==0 ? (d/v25*100) : 0;
+
+    sum25 += v25;
+    sum26 += v26;
+
+    const cls = d < 0 ? "neg" : "pos";
+    html += `<tr>
+      <td>${label}</td>
+      <td>${fmtEUR(v25)}</td>
+      <td>${fmtEUR(v26)}</td>
+      <td class="${cls}">${fmtEUR(d)}</td>
+      <td class="${cls}">${fmtPct(p)}</td>
+    </tr>`;
+  }
+
+  const sd = sum26 - sum25;
+  const sp = sum25!==0 ? (sd/sum25*100) : 0;
+
+  html += `</tbody><tfoot>
+    <tr>
+      <td>Netzentgeltsumme</td>
+      <td>${fmtEUR(sum25)}</td>
+      <td>${fmtEUR(sum26)}</td>
+      <td class="${sd<0?"neg":"pos"}">${fmtEUR(sd)}</td>
+      <td>${fmtPct(sp)}</td>
+    </tr>
+  </tfoot></table>`;
+
+  tc.innerHTML = html;
+
+  ctx.innerHTML = `
+    Netzbetreiber: <strong>${r.operator_name}</strong> &nbsp;|&nbsp;
+    Szenario: <strong>${r.verbrauch_mwh} MWh / ${r.leistung_kw} kW</strong> &nbsp;|&nbsp;
+    Spannungsebene: <strong>${voSel.options[voSel.selectedIndex].text}</strong>
+  `;
+
   hint.style.display="none";
   res.style.display="block";
 }
 
-function resetSelection(){
-  op.value="";
-  vo.value="";
-  res.style.display="none";
-  hint.style.display="block";
+function toNum(x){
+  if(x===undefined || x===null || x==="") return 0;
+  const v = String(x).replace(",", "."); // falls doch mal Komma drin ist
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
 }
 
-op.addEventListener("change",update);
-vo.addEventListener("change",update);
+function fmtEUR(n){
+  return n.toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}) + " €";
+}
 
-/* URL-Parameter */
-const params = new URLSearchParams(window.location.search);
-if(params.get("operator") && params.get("voltage")){
-  op.value = params.get("operator");
-  vo.value = params.get("voltage");
-  update();
+function fmtPct(n){
+  return n.toFixed(2).replace(".", ",") + " %";
 }
 </script>
+
 </body>
 </html>

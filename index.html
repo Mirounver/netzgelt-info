@@ -363,7 +363,6 @@ voSel.addEventListener("change", () => {
 });
 
 function updateHintText(){
-  // nichts gewählt
   if(!opSel.value && !scSel.value && !voSel.value){
     hint.textContent =
       "Bitte wählen Sie den Netzbetreiber, den Verbrauch und die Spannungsebene aus.";
@@ -371,7 +370,6 @@ function updateHintText(){
     return;
   }
 
-  // nur Netzbetreiber gewählt
   if(opSel.value && !scSel.value){
     hint.textContent =
       "Bitte wählen Sie den Verbrauch und die Spannungsebene aus.";
@@ -379,7 +377,6 @@ function updateHintText(){
     return;
   }
 
-  // Netzbetreiber + Verbrauch gewählt
   if(opSel.value && scSel.value && !voSel.value){
     hint.textContent =
       "Bitte wählen Sie die Spannungsebene aus.";
@@ -387,7 +384,6 @@ function updateHintText(){
     return;
   }
 
-  // alles gewählt
   hint.style.display = "none";
 }
   

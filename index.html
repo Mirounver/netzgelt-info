@@ -33,8 +33,8 @@ body{
   max-width:1200px;
   width:100%;
   padding:48px;
-  border-radius:8px;            /* weniger Rundung */
-  box-shadow:0 4px 12px rgba(0,0,0,.06); /* sehr dezent */
+  border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
 }
 
 .logo{text-align:center}
@@ -125,7 +125,7 @@ td:not(:first-child){text-align:right;white-space:nowrap}
 tfoot td{
   font-weight:700;
   background:#f2f2f2;
-  color:#000;           /* IMMER schwarz */
+  color:#000;
 }
   
 tfoot td.pos,
@@ -180,7 +180,6 @@ button:hover{opacity:.9}
   .card{padding:32px 24px}
 }
 
-/* Druckoptimierung */
 @media print{
   .selectors,
   .actions,
@@ -207,7 +206,6 @@ button:hover{opacity:.9}
     page-break-inside:avoid;
   }
 
-  /* HIER EINFÜGEN (Tabellenkopf im Druck) */
   thead th{
     background:var(--ner-violet) !important;
     color:#fff !important;
@@ -296,7 +294,7 @@ Bitte wählen Sie den Netzbetreiber, den Verbrauch und die Spannungsebene aus.
 </div>
 
 <script>
-const CSV_PATH = "netzentgelte.csv"; // liegt im gleichen Ordner wie index.html
+const CSV_PATH = "netzentgelte.csv";
 
 const opSel = document.getElementById("operator");
 const scSel = document.getElementById("scenario");

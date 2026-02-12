@@ -274,49 +274,105 @@ Darunter kann zusätzlich ein individueller Netzentgeltvergleich nach Netzbetrei
 
 <!-- ====== NEU: Bereich "Allgemeine Umlagen" (immer sichtbar) ====== -->
 <h2>Allgemeine Umlagen und Abgaben</h2>
+<p class="section-lead">
+  Übersicht zentraler, allgemein geltender Umlagen und Abgaben. Die Werte sind als Vergleich 2025 zu 2026 dargestellt und
+  dienen der Orientierung.
+</p>
 
 <div class="top-tables">
 
-  <!-- Tabelle links -->
+  <!-- Tabelle links: Strom -->
   <div class="panel">
     <div class="panel-head">
-      <h3>Übersicht A: Umlagen (bundesweit)</h3>
-      <p class="panel-text">
-        Diese Tabelle zeigt allgemeine Umlagebestandteile, die unabhängig vom ausgewählten Netzbetreiber gelten können.
-        Die Werte sind als Jahresvergleich 2025/2026 dargestellt.
-      </p>
+      <h3>Strom</h3>
     </div>
 
     <table>
       <thead>
-        <tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr>
+        <tr>
+          <th></th>
+          <th>2025 (ct/kWh)</th>
+          <th>2026 (ct/kWh)</th>
+          <th>Veränderung</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td>Umlage 1</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
-        <tr><td>Umlage 2</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
-        <tr><td>Umlage 3</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr>
+          <td>StromNEV-Umlage (§19)</td>
+          <td>1,558</td>
+          <td>1,559</td>
+          <td class="pos">+ 0,1 %</td>
+        </tr>
+        <tr>
+          <td>KWKG-Umlage</td>
+          <td>0,277</td>
+          <td>0,446</td>
+          <td class="pos">+ 61,0 %</td>
+        </tr>
+        <tr>
+          <td>Offshore-Netzumlage (§17f EnWG)</td>
+          <td>0,816</td>
+          <td>0,941</td>
+          <td class="pos">+ 15,3 %</td>
+        </tr>
+        <tr>
+          <td>Stromsteuer</td>
+          <td colspan="3" style="text-align:center">unverändert (2,05 ct/kWh)</td>
+        </tr>
+        <tr>
+          <td>Konzessionsabgabe (Sondervertrag)</td>
+          <td colspan="3" style="text-align:center">unverändert</td>
+        </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Tabelle rechts -->
+  <!-- Tabelle rechts: Erdgas (Energiesteuer & Konzessionsabgabe getauscht) -->
   <div class="panel">
     <div class="panel-head">
-      <h3>Übersicht B: Weitere Abgaben/Bestandteile</h3>
-      <p class="panel-text">
-        Ergänzende Bestandteile (z. B. weitere Abgaben oder Preisbestandteile), die Sie separat ausweisen möchten.
-        Auch hier wird der Vergleich 2025/2026 gezeigt.
-      </p>
+      <h3>Erdgas</h3>
     </div>
 
     <table>
       <thead>
-        <tr><th></th><th>2025</th><th>2026</th><th>Veränderung</th><th>Veränderung (%)</th></tr>
+        <tr>
+          <th></th>
+          <th>2025 (ct/kWh)</th>
+          <th>2026 (ct/kWh)</th>
+          <th>Veränderung</th>
+        </tr>
       </thead>
       <tbody>
-        <tr><td>Bestandteil 1</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
-        <tr><td>Bestandteil 2</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
-        <tr><td>Bestandteil 3</td><td>–</td><td>–</td><td>–</td><td>–</td></tr>
+        <tr>
+          <td>CO₂-Kosten (BEHG)</td>
+          <td>0,997</td>
+          <td>1,179*</td>
+          <td class="pos">+ 18,3 %</td>
+        </tr>
+        <tr>
+          <td>Gasspeicherumlage</td>
+          <td>0,299</td>
+          <td>0,000</td>
+          <td style="color:green;font-weight:600">entfällt</td>
+        </tr>
+        <tr>
+          <td>Bilanzierungsumlagen (SLP und RLM)</td>
+          <td colspan="3" style="text-align:center">unverändert (0,00 ct/kWh)</td>
+        </tr>
+        <tr>
+          <td>Konvertierungsentgelt (H → L)</td>
+          <td colspan="3" style="text-align:center">unverändert (0,018 ct/kWh)</td>
+        </tr>
+
+        <!-- GETAUSCHT: erst Konzessionsabgabe, dann Energiesteuer -->
+        <tr>
+          <td>Konzessionsabgabe (Sondervertrag)</td>
+          <td colspan="3" style="text-align:center">unverändert</td>
+        </tr>
+        <tr>
+          <td>Energiesteuer</td>
+          <td colspan="3" style="text-align:center">unverändert (0,55 ct/kWh)</td>
+        </tr>
       </tbody>
     </table>
   </div>

@@ -195,9 +195,8 @@ button:hover{opacity:.9}
 @media print{
   .selectors,
   .actions,
-  .hint,
-  p,
-  h1 {
+  #hint,
+  p {
     display:none;
   }
 
@@ -349,9 +348,10 @@ fetch(CSV_PATH)
   .then(r => r.text())
   .then(text => {
     rows = parseCSV(text, ";");
-initOperators();
-updateHintText();
+    initOperators();
+    updateHintText();
   })
+
   .catch(err => {
     hint.style.display="block";
     hint.textContent = "CSV konnte nicht geladen werden. Prüfe Dateiname/Pfad.";
@@ -479,7 +479,7 @@ function buildGeneralTable(items){
     if(it.note && (it.v25 === undefined || it.v26 === undefined)){
       t += `<tr>
         <td>${it.label}</td>
-        <td colspan="3" style="text-align:left">${it.note}</td>
+        <td colspan="3" style="text-align:center; color:#333; font-weight:500;">${it.note}</td>
       </tr>`;
       continue;
     }

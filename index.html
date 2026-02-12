@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="utf-8">
-<title>Netzentgeltvergleich nach Verbrauch und Spannungsebene</title>
+<title>Aktuelle Information zu den Steuern, Umlagen und Netzentgelten</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -150,6 +150,10 @@ tfoot td.neg{
   font-weight:600;
 }
 
+.zero{
+  color:#1a7f37;   /* ruhiges grün */
+  font-weight:600;
+}
 
 .actions{
   margin-top:24px;
@@ -237,7 +241,7 @@ button:hover{opacity:.9}
 <img src="N-ERGIE_LOGO_RGB.png" alt="N-ERGIE Logo">
 </div>
 
-<h1>Netzentgeltvergleich nach Verbrauch und Spannungsebene</h1>
+<h1>Aktuelle Information zu den Steuern, Umlagen und Netzentgelten</h1>
 
 <p>
 Auf dieser Seite erhalten Sie eine vergleichende Übersicht der Netzentgelte für unterschiedliche Verbrauchs- und Leistungsszenarien.
@@ -279,6 +283,15 @@ Bitte wählen Sie den Netzbetreiber, den Verbrauch und die Spannungsebene aus.
 <div id="result" class="result">
 
 <div id="context" class="context"></div>
+<h2>Allgemeine Steuern und Umlagen</h2>
+
+<div id="generalChargesNote" class="hint" style="margin-top:12px;">
+  Die folgenden Steuern und Umlagen sind bundesweit einheitlich und unabhängig vom gewählten Netzbetreiber.
+</div>
+
+<div id="generalCharges"></div>
+
+<h2>Netzentgelte</h2>
 <div id="tableContainer"></div>
 
 <div class="actions">
@@ -310,8 +323,27 @@ const res   = document.getElementById("result");
 const tc    = document.getElementById("tableContainer");
 const hint  = document.getElementById("hint");
 const ctx   = document.getElementById("context");
+const gc    = document.getElementById("generalCharges");
 
 let rows = [];
+// Bundeseinheitliche Steuern & Umlagen (unabhängig vom Netzbetreiber)
+const GENERAL_CHARGES = {
+  strom: [
+    { label: "StromNEV-Umlage (§19)", v25: 1.558, v26: 1.559, unit: "ct/kWh" },
+    { label: "KWKG-Umlage", v25: 0.277, v26: 0.446, unit: "ct/kWh" },
+    { label: "Offshore-Netzumlage (§17f EnWG)", v25: 0.816, v26: 0.941, unit: "ct/kWh" },
+    { label: "Stromsteuer", note: "unverändert (2,05 ct/kWh)" },
+    { label: "Konzessionsabgabe (Sondervertrag)", note: "unverändert" }
+  ],
+  erdgas: [
+    { label: "CO₂-Kosten (BEHG)", v25: 0.997, v26: 1.179, unit: "ct/kWh", v26_note: "*" },
+    { label: "Gasspeicherumlage", v25: 0.299, v26: 0.000, unit: "ct/kWh", noteRight: "entfällt" },
+    { label: "Bilanzierungsumlagen (SLP und RLM)", note: "unverändert (0,00 ct/kWh)" },
+    { label: "Konvertierungsentgelt (H → L)", note: "unverändert (0,018 ct/kWh)" },
+    { label: "Energiesteuer", note: "unverändert (0,55 ct/kWh)" },
+    { label: "Konzessionsabgabe (Sondervertrag)", note: "unverändert" }
+  ]
+};
 
 fetch(CSV_PATH)
   .then(r => r.text())
@@ -419,6 +451,72 @@ function updateVoltages(){
   });
 }
 
+function renderGeneralCharges(){
+  if(!gc) return;
+
+  let html = "";
+
+  // --- Strom ---
+  html += `<h3>Strom</h3>`;
+  html += buildGeneralTable(GENERAL_CHARGES.strom);
+
+  // --- Erdgas ---
+  html += `<h3>Erdgas</h3>`;
+  html += buildGeneralTable(GENERAL_CHARGES.erdgas);
+
+  gc.innerHTML = html;
+}
+
+function buildGeneralTable(items){
+  let t = `<table>
+    <thead>
+      <tr><th></th><th>2025 (ct/kWh)</th><th>2026 (ct/kWh)</th><th>Veränderung</th></tr>
+    </thead><tbody>`;
+
+  for(const it of items){
+
+    // Fall: "unverändert" / Textzeile
+    if(it.note && (it.v25 === undefined || it.v26 === undefined)){
+      t += `<tr>
+        <td>${it.label}</td>
+        <td colspan="3" style="text-align:left">${it.note}</td>
+      </tr>`;
+      continue;
+    }
+
+    const v25 = Number(it.v25 ?? 0);
+    const v26 = Number(it.v26 ?? 0);
+
+    // Sonderfall: entfällt (2026 = 0 und Hinweis)
+    if(v26 === 0 && (it.noteRight === "entfällt" || it.label.toLowerCase().includes("gasspeicher"))){
+      t += `<tr>
+        <td>${it.label}</td>
+        <td>${fmtCt(v25)}</td>
+        <td>${fmtCt(v26)}</td>
+        <td class="zero">entfällt</td>
+      </tr>`;
+      continue;
+    }
+
+    const p = pctChange(v25, v26);
+    let cls = "";
+    if(p > 0) cls = "pos";
+    else if(p < 0) cls = "neg";
+
+    const v26Text = it.v26_note ? `${fmtCt(v26)}${it.v26_note}` : fmtCt(v26);
+
+    t += `<tr>
+      <td>${it.label}</td>
+      <td>${fmtCt(v25)}</td>
+      <td>${v26Text}</td>
+      <td class="${cls}">${(p>=0?"+ ":"")}${p.toFixed(1).replace(".", ",")} %</td>
+    </tr>`;
+  }
+
+  t += `</tbody></table>`;
+  return t;
+}
+
 function render(){
   if(!opSel.value || !scSel.value || !voSel.value) return;
 
@@ -433,6 +531,7 @@ function render(){
     res.style.display="none";
     return;
   }
+renderGeneralCharges();
 
   const positions = [
     ["Arbeitskosten HT","arbeitskosten_ht"],
@@ -524,6 +623,15 @@ function fmtEUR(n){
 function fmtPct(n){
   return n.toFixed(2).replace(".", ",") + " %";
 }
+function fmtCt(n){
+  return n.toFixed(3).replace(".", ",");
+}
+
+function pctChange(v25, v26){
+  if(v25 === 0) return 0;
+  return ( (v26 - v25) / v25 ) * 100;
+}
+
 </script>
 
 </body>

@@ -291,13 +291,6 @@ button:hover{opacity:.9}
     background:#fff;
   }
 
-  .container{
-    box-shadow:none;
-    border:none;
-    padding:0;
-    margin:0;
-  }
-
   /* Jede Print-Page = neue PDF-Seite */
   .print-page{
     page-break-after: always;
@@ -339,9 +332,47 @@ button:hover{opacity:.9}
     break-before: page;
   }
 
-  table{
-    page-break-inside: avoid;
+  /* ===== PDF: Texte ausblenden ===== */
+
+  .subtitle,
+  .section-desc{
+    display:none !important;
   }
+
+  /* ===== PDF: Formular/Bedienung ausblenden ===== */
+
+  .selectors,
+  .hint,
+  .actions,
+  .disclaimer{
+    display:none !important;
+  }
+.subtitle{
+  display:none !important;
+  height:0 !important;
+  margin:0 !important;
+}
+
+.card{
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
+@page{
+  margin:18mm;
+}
+.section-divider{
+  display:none !important;
+}
+.page{
+  display:block !important;
+  min-height:auto !important;
+  padding:0 !important;
+}
+.top-tables{
+  display:grid !important;
+  grid-template-columns:1fr 1fr !important;
+  gap:24px !important;
+}
 
 }
 </style>
@@ -471,7 +502,6 @@ button:hover{opacity:.9}
 <div class="section-divider"></div>
 
 <div class="print-page page-netz">
-<div class="print-page-break"></div>
   <h2 class="section-title">Netzentgeltvergleich</h2>
 
   <p class="section-desc">

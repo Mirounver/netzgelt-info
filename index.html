@@ -27,6 +27,56 @@ body{
   align-items:center;
   padding:40px 20px;
 }
+/* ===== Abschnitts-Layout ===== */
+
+.section{
+  margin-top:48px;
+}
+
+.section-card{
+  background:#fafafa;
+  border:1px solid #e3e3e3;
+  border-radius:10px;
+  padding:28px 28px 32px;
+}
+
+.section-card.tool{
+  background:#f5f5f7;
+  border:2px solid var(--ner-violet);
+}
+
+/* Abschnittsüberschrift */
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 10px 0;
+  font-size:20px;
+  color:var(--ner-violet);
+}
+
+.section-title::before{
+  content:"";
+  width:6px;
+  height:22px;
+  background:var(--ner-violet);
+  border-radius:3px;
+}
+
+/* Abschnittsbeschreibung */
+.section-desc{
+  margin:0 0 22px 0;
+  color:#666;
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* starker Trenner zwischen Hauptbereichen */
+.section-divider{
+  margin:56px 0;
+  height:2px;
+  background:linear-gradient(to right, transparent, #ddd, transparent);
+}
 
 .card{
   background:#fff;
@@ -267,15 +317,15 @@ button:hover{opacity:.9}
 <!-- Überschrift + Unterüberschrift angepasst -->
 <h1>Umlagen und Netzentgelte 2025/2026</h1>
 <div class="subtitle">Neben allgemeinen Umlagen und Abgaben wird ein strukturierter Vergleich der Netzentgelte nach Netzbetreiber, Verbrauchs- und Leistungsszenario sowie Spannungsebene ermöglicht.</div>
-<div style="height:20px"></div>
 
 
-<!-- ====== NEU: Bereich "Allgemeine Umlagen" (immer sichtbar) ====== -->
-<h2>Allgemeine Umlagen und Steuern</h2>
-<p class="section-lead">
-  Übersicht allgemein geltender Umlagen und Steuern. Die Werte sind als Vergleich 2025 zu 2026 dargestellt und
-  dienen der Orientierung.
-</p>
+<div class="section section-card">
+
+  <h2 class="section-title">Allgemeine Umlagen und Steuern</h2>
+
+  <p class="section-desc">
+    Übersicht allgemein geltender Umlagen und Steuern. Die Werte sind als Vergleich 2025 zu 2026 dargestellt und dienen der Orientierung.
+  </p>
 
 <div class="top-tables">
 
@@ -376,13 +426,14 @@ button:hover{opacity:.9}
   </div>
 
 </div>
-<div style="height:20px"></div>
+<div class="section-divider"></div>
 
-<!-- ====== NEU: Text für Netzentgelt-Teil ====== -->
-<h2>Netzentgelte</h2>
-<p class="section-lead">
-Für den Netzentgeltvergleich wählen Sie bitte unten den Netzbetreiber, ein Verbrauchs- und Leistungsszenario sowie die passende Spannungsebene.
-</p>
+
+  <h2 class="section-title">Netzentgeltvergleich</h2>
+
+  <p class="section-desc">
+    Auswahl von Netzbetreiber, Verbrauchs- bzw. Leistungsszenario und Spannungsebene zur strukturierten Vergleichsrechnung.
+  </p>
 
 <!-- Dropdowns bleiben wie gehabt -->
 <div class="selectors">
@@ -438,7 +489,6 @@ Bitte wählen Sie den Netzbetreiber, den Verbrauch und die Spannungsebene aus.
 
 </div>
 
-</div>
 </div>
 
 <script>

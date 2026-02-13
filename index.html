@@ -334,6 +334,14 @@ button:hover{opacity:.9}
   h1,h2,h3{
     margin-top:0;
   }
+    .print-page-break{
+    page-break-before: always;
+    break-before: page;
+  }
+
+  table{
+    page-break-inside: avoid;
+  }
 
 }
 </style>
@@ -463,6 +471,7 @@ button:hover{opacity:.9}
 <div class="section-divider"></div>
 
 <div class="print-page page-netz">
+<div class="print-page-break"></div>
   <h2 class="section-title">Netzentgeltvergleich</h2>
 
   <p class="section-desc">

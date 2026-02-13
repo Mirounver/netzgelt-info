@@ -27,7 +27,6 @@ body{
   align-items:center;
   padding:40px 20px;
 }
-/* ===== Abschnitts-Layout ===== */
 
 .section{
   margin-top:48px;
@@ -45,7 +44,6 @@ body{
   border:2px solid var(--ner-violet);
 }
 
-/* Abschnittsüberschrift */
 .section-title{
   display:flex;
   align-items:center;
@@ -63,7 +61,6 @@ body{
   border-radius:3px;
 }
 
-/* Abschnittsbeschreibung */
 .section-desc{
   margin:0 0 22px 0;
   color:#666;
@@ -71,7 +68,6 @@ body{
   line-height:1.4;
 }
 
-/* starker Trenner zwischen Hauptbereichen */
 .section-divider{
   margin:56px 0;
   height:2px;
@@ -128,7 +124,6 @@ p{
    text-align:center;
 }
 
-/* ====== NEU: Zwei Tabellen nebeneinander ====== */
 .top-tables{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -155,7 +150,6 @@ p{
   margin-top:10px;
 }
 
-/* Bestehende Selektoren */
 .selectors{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
@@ -277,13 +271,6 @@ button:hover{opacity:.9}
   .card{padding:32px 24px}
 }
 
-/* =========================
-   PRINT / PDF FIXES
-   ========================= */
-
-/* ======================
-   PRINT FIX LAYOUT
-   ====================== */
 
 @media print {
 
@@ -292,29 +279,24 @@ button:hover{opacity:.9}
   }
 
 
-  /* Tabellen nicht umbrechen */
   table{
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  /* Karten / Boxen nicht zerschneiden */
   .card, .section, .block{
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  /* Formularbereich kompakter */
   .form-grid{
     grid-template-columns: 1fr 1fr 1fr;
   }
 
-  /* Buttons nicht drucken */
   .actions{
     display:none;
   }
 
-  /* große Abstände vermeiden */
   h1,h2,h3{
     margin-top:0;
   }
@@ -323,14 +305,10 @@ button:hover{opacity:.9}
   break-before:auto !important;
   }
 
-  /* ===== PDF: Texte ausblenden ===== */
-
   .subtitle,
   .section-desc{
     display:none !important;
   }
-
-  /* ===== PDF: Formular/Bedienung ausblenden ===== */
 
   .selectors,
   .hint,
@@ -377,7 +355,6 @@ button:hover{opacity:.9}
   <img src="N-ERGIE_LOGO_RGB.png" alt="N-ERGIE Logo">
 </div>
 
-<!-- Überschrift + Unterüberschrift angepasst -->
 <h1>Umlagen und Netzentgelte 2025/2026</h1>
 <div class="subtitle">Neben allgemeinen Umlagen und Abgaben wird ein strukturierter Vergleich der Netzentgelte nach Netzbetreiber, Verbrauchs- und Leistungsszenario sowie Spannungsebene ermöglicht.</div>
 
@@ -392,7 +369,6 @@ button:hover{opacity:.9}
 
 <div class="top-tables">
 
-  <!-- Tabelle links: Strom -->
   <div class="panel">
     <div class="panel-head">
       <h3>Strom</h3>
@@ -438,7 +414,6 @@ button:hover{opacity:.9}
     </table>
   </div>
 
-  <!-- Tabelle rechts: Erdgas (Energiesteuer & Konzessionsabgabe getauscht) -->
   <div class="panel">
     <div class="panel-head">
       <h3>Erdgas</h3>
@@ -475,7 +450,6 @@ button:hover{opacity:.9}
           <td colspan="3" style="text-align:center">unverändert (0,018 ct/kWh)</td>
         </tr>
 
-        <!-- GETAUSCHT: erst Konzessionsabgabe, dann Energiesteuer -->
         <tr>
           <td>Konzessionsabgabe (Sondervertrag)</td>
           <td colspan="3" style="text-align:center">unverändert</td>
@@ -499,7 +473,6 @@ button:hover{opacity:.9}
     Auswahl von Netzbetreiber, Verbrauchs- bzw. Leistungsszenario und Spannungsebene zur strukturierten Vergleichsrechnung.
   </p>
 
-<!-- Dropdowns bleiben wie gehabt -->
 <div class="selectors">
   <div>
     <strong>Netzbetreiber</strong>

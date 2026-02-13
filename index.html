@@ -281,80 +281,61 @@ button:hover{opacity:.9}
    PRINT / PDF FIXES
    ========================= */
 
+/* ======================
+   PRINT FIX LAYOUT
+   ====================== */
+
 @media print {
 
   body{
-    background:#fff !important;
+    background:#fff;
   }
 
   .container{
-    max-width:none;
+    box-shadow:none;
+    border:none;
     padding:0;
     margin:0;
   }
 
-  /* Kästen ruhiger im Druck */
-  .section-card{
-    border:1px solid #ccc !important;
-    box-shadow:none !important;
-    background:#fff !important;
-    break-inside:avoid;
-    page-break-inside:avoid;
+  /* Jede Print-Page = neue PDF-Seite */
+  .print-page{
+    page-break-after: always;
+    break-after: page;
   }
 
-  /* Tabellen sauber umbrechen */
+  .print-page:last-child{
+    page-break-after: auto;
+  }
+
+  /* Tabellen nicht umbrechen */
   table{
-    width:100%;
-    border-collapse:collapse;
-    page-break-inside:auto;
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
-  tr{
-    page-break-inside:avoid;
-    page-break-after:auto;
+  /* Karten / Boxen nicht zerschneiden */
+  .card, .section, .block{
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
-  thead{
-    display:table-header-group;
+  /* Formularbereich kompakter */
+  .form-grid{
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
-  tfoot{
-    display:table-footer-group;
+  /* Buttons nicht drucken */
+  .actions{
+    display:none;
   }
 
-  /* Überschriften nicht abreißen */
+  /* große Abstände vermeiden */
   h1,h2,h3{
-    page-break-after:avoid;
-  }
-
-  /* Formularbereich nicht mitten trennen */
-  .form-row,
-  .selectors,
-  .input-grid{
-    break-inside:avoid;
-    page-break-inside:avoid;
-  }
-
-  /* Buttons im PDF ausblenden */
-  .actions,
-  button{
-    display:none !important;
-  }
-
-  /* Dropdowns sauber */
-  select{
-    border:1px solid #999;
-    background:#fff;
-  }
-
-  /* Hinweisblock zusammenhalten */
-  .hint,
-  .note{
-    page-break-inside:avoid;
+    margin-top:0;
   }
 
 }
-
 </style>
 </head>
 
@@ -371,7 +352,7 @@ button:hover{opacity:.9}
 <div class="subtitle">Neben allgemeinen Umlagen und Abgaben wird ein strukturierter Vergleich der Netzentgelte nach Netzbetreiber, Verbrauchs- und Leistungsszenario sowie Spannungsebene ermöglicht.</div>
 
 
-<div class="section section-card">
+<div class="print-page page-umlagen">
 
   <h2 class="section-title">Allgemeine Umlagen und Steuern</h2>
 
@@ -478,9 +459,10 @@ button:hover{opacity:.9}
   </div>
 
 </div>
+</div>
 <div class="section-divider"></div>
 
-
+<div class="print-page page-netz">
   <h2 class="section-title">Netzentgeltvergleich</h2>
 
   <p class="section-desc">

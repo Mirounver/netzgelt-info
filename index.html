@@ -277,32 +277,84 @@ button:hover{opacity:.9}
   .card{padding:32px 24px}
 }
 
-@media print{
+/* =========================
+   PRINT / PDF FIXES
+   ========================= */
+
+@media print {
+
+  body{
+    background:#fff !important;
+  }
+
+  .container{
+    max-width:none;
+    padding:0;
+    margin:0;
+  }
+
+  /* Kästen ruhiger im Druck */
+  .section-card{
+    border:1px solid #ccc !important;
+    box-shadow:none !important;
+    background:#fff !important;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+
+  /* Tabellen sauber umbrechen */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    page-break-inside:auto;
+  }
+
+  tr{
+    page-break-inside:avoid;
+    page-break-after:auto;
+  }
+
+  thead{
+    display:table-header-group;
+  }
+
+  tfoot{
+    display:table-footer-group;
+  }
+
+  /* Überschriften nicht abreißen */
+  h1,h2,h3{
+    page-break-after:avoid;
+  }
+
+  /* Formularbereich nicht mitten trennen */
+  .form-row,
   .selectors,
+  .input-grid{
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+
+  /* Buttons im PDF ausblenden */
   .actions,
+  button{
+    display:none !important;
+  }
+
+  /* Dropdowns sauber */
+  select{
+    border:1px solid #999;
+    background:#fff;
+  }
+
+  /* Hinweisblock zusammenhalten */
   .hint,
-  p,
-  h1,
-  .subtitle{
-    display:none;
+  .note{
+    page-break-inside:avoid;
   }
 
-  body{background:#fff}
-  .card{box-shadow:none;padding:0}
-  table{font-size:0.9rem}
-  tr, td, th{page-break-inside:avoid}
-
-  thead th{
-    background:var(--ner-violet) !important;
-    color:#fff !important;
-    font-weight:700;
-  }
-
-  @page{
-    size:A4;
-    margin:15mm;
-  }
 }
+
 </style>
 </head>
 
